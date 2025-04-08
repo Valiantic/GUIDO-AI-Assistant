@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Guido AI",
+  title: "GUIDO",
   description: "AI Voice Assistant by Steven Madali",
 };
 

@@ -57,7 +57,7 @@ export default function Home() {
       
       {isLoading && <p className="text-lg">Thinking...</p>}
       
-      {response && <p className="text-lg text-green-600">Assistant: "{response}"</p>}
+      {response && <p className="text-lg text-green-600">GUIDO: "{response}"</p>}
     </div>
   );
 }
