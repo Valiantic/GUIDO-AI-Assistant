@@ -50,7 +50,12 @@ export default function Home() {
       {!isSupported ? (
         <p className="text-red-500">Speech recognition is not supported in your browser.</p>
       ) : (
-        <PushToTalk onStart={handleStart} onStop={handleStop} listening={listening} />
+        <PushToTalk 
+          onStart={handleStart} 
+          onStop={handleStop} 
+          listening={listening} 
+          assistantResponding={isLoading}
+        />
       )}
       
       {message && <p className="text-lg text-gray-600">You said: "{message}"</p>}

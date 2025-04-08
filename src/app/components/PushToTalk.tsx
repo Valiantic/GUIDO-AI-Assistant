@@ -31,14 +31,15 @@ const PushToTalk: React.FC<PushToTalkProps> = ({
 
   return (
     <div className="flex flex-col items-center">
-      <div className={`rounded-full ${listening ? 'animate-pulse bg-red-300 p-2' : 'p-0'}`}>
+      <div className={`rounded-full ${listening && !assistantResponding ? 'animate-pulse bg-red-300 p-2' : 'p-0'}`}>
         <button
           className={`p-1 w-24 h-24 rounded-full flex items-center justify-center text-white shadow-lg transition-all ${
-            listening ? 'bg-red-500 scale-110' : 'bg-blue-500 hover:bg-blue-600'
+            listening && !assistantResponding ? 'bg-red-500 scale-110' : 'bg-blue-500 hover:bg-blue-600'
           }`}
           onClick={handleToggle}
+          disabled={assistantResponding}
         >
-          {listening ? (
+          {listening && !assistantResponding ? (
             <span className="animate-pulse">Listening...</span>
           ) : (
             <span>Push to Talk</span>
@@ -46,7 +47,9 @@ const PushToTalk: React.FC<PushToTalkProps> = ({
         </button>
       </div>
       <p className="mt-3 text-sm text-gray-500">
-        {listening ? 'Push again when finished' : 'Click to start speaking'}
+        {assistantResponding 
+          ? 'Please wait...' 
+          : (listening ? 'Push again when finished' : 'Click to start speaking')}
       </p>
     </div>
   );
