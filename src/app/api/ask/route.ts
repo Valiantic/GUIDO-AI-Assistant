@@ -47,11 +47,12 @@ function findResponseCategory(message: string): keyof typeof responses {
   return 'unknown';
 }
 
-// Get a random response from a category
-function getRandomResponse(category: keyof typeof responses): string {
+function getResponse(category: keyof typeof responses, message: string): string {
   const options = responses[category];
-  const randomIndex = Math.floor(Math.random() * options.length);
-  return options[randomIndex];
+
+  const charSum = message.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
+  const index = charSum % options.length;
+  return options[index];
 }
 
 // Next.js App Router API route handler
@@ -67,9 +68,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // Find appropriate response based on message content
     const category = findResponseCategory(message);
-    const response = getRandomResponse(category);
+    const response = getResponse(category, message);
     
     return NextResponse.json({ response });
   } catch (error) {
