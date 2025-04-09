@@ -1,3 +1,5 @@
+"use client";
+
 // Define the SpeechRecognition interfaces
 interface SpeechRecognitionErrorEvent extends Event {
   error: string;

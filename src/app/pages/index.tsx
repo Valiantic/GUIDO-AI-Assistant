@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import PushToTalk from '../components/PushToTalk';
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
-import { speak } from '../utils/speak';
+import { speak } from '../utils/speak'; // Using lowercase import
 
 export default function Home() {
   const [message, setMessage] = useState('');
@@ -24,7 +24,7 @@ export default function Home() {
 
       const data = await res.json();
       setResponse(data.response);
-      speak(data.response);
+      speak(data.response); // This is now safe with our updated speak utility
     } catch (error) {
       console.error('Error processing request:', error);
       setResponse('Sorry, there was an error processing your request.');
