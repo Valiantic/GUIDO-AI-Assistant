@@ -1,15 +1,16 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PushToTalk from '../components/PushToTalk';
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
-import { speak } from '../utils/speak'; // Using lowercase import
+import { speak } from '../utils/speak';
 
 export default function Home() {
   const [message, setMessage] = useState('');
   const [listening, setListening] = useState(false);
   const [response, setResponse] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isBrowserSupported, setIsBrowserSupported] = useState(true); 
 
   const { start, stop, isSupported } = useSpeechRecognition(async (text: string) => {
     setMessage(text);
@@ -33,6 +34,11 @@ export default function Home() {
     }
   });
 
+  // Check browser support after component mounts
+  useEffect(() => {
+    setIsBrowserSupported(isSupported);
+  }, [isSupported]);
+
   const handleStart = () => {
     setListening(true);
     start();
@@ -47,15 +53,17 @@ export default function Home() {
     <div className="flex flex-col items-center justify-center min-h-screen space-y-6 bg-gray-50 text-center p-4">
       <h1 className="text-7xl text-black font-bold">GUIDO</h1>
       
-      {!isSupported ? (
-        <p className="text-red-500">Speech recognition is not supported in your browser.</p>
-      ) : (
-        <PushToTalk 
-          onStart={handleStart} 
-          onStop={handleStop} 
-          listening={listening} 
-          assistantResponding={isLoading}
-        />
+      {/* Always render PushToTalk first for hydration, then conditionally disable it */}
+      <PushToTalk 
+        onStart={handleStart} 
+        onStop={handleStop} 
+        listening={listening} 
+        assistantResponding={isLoading}
+        isSupported={isBrowserSupported}
+      />
+      
+      {!isBrowserSupported && (
+        <p className="text-red-500 mt-2">Speech recognition is not supported in your browser.</p>
       )}
       
       {message && <p className="text-lg text-gray-600">You said: "{message}"</p>}

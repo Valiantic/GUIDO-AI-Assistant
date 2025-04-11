@@ -54,15 +54,17 @@ declare global {
 export const useSpeechRecognition = (
   onResult: (text: string) => void
 ): { start: () => void; stop: () => void; isSupported: boolean } => {
-  if (typeof window === 'undefined') 
-    return { start: () => {}, stop: () => {}, isSupported: false };
+  const defaultReturn = { start: () => {}, stop: () => {}, isSupported: false };
+  
+  if (typeof window === 'undefined') {
+    return defaultReturn;
+  }
   
   const SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition;
   
   if (!SpeechRecognition) {
-    console.warn('SpeechRecognition API is not supported in this browser');
-    return { start: () => {}, stop: () => {}, isSupported: false };
+    return defaultReturn;
   }
   
   const recognition = new SpeechRecognition();
