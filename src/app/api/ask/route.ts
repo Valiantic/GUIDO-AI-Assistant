@@ -20,6 +20,11 @@ const responses = {
     "I can answer questions, provide information, or just chat. What would you like to know?",
     "I'm here to assist with information and conversation. How can I help you specifically?"
   ],
+  time: [
+    "The current time and date is {TIME_DATE}",
+    "Right nowm it's {TIME_DATE}",
+    "It's currently {TIME_DATE}"
+  ],
   unknown: [
     "I'm not sure I understand. Could you rephrase that?",
     "I don't have information about that. Could I help with something else?",
@@ -40,6 +45,9 @@ function findResponseCategory(message: string): keyof typeof responses {
   if (message.match(/\b(weather|temperature|forecast|rain|snow)\b/)) {
     return 'weather';
   }
+  if (message.match(/\b(time|date|current time|now)\b/)) {
+    return 'time';
+  }
   if (message.match(/\b(help|assist|support|what can you do)\b/)) {
     return 'help';
   }
@@ -52,7 +60,15 @@ function getResponse(category: keyof typeof responses, message: string): string 
 
   const charSum = message.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
   const index = charSum % options.length;
-  return options[index];
+  let response = options[index];
+  
+  if (category === 'time') {
+    const now = new Date();
+    const formattedDateTime = now.toLocaleString();
+    response = response.replace('{TIME_DATE}', formattedDateTime);
+  }
+  
+  return response;
 }
 
 // Next.js App Router API route handler
